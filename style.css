@@ -336,16 +336,14 @@ body::before {
     color: var(--dark-bg);
 }
 
-/* For Making it Responsive */
 @media (max-width: 768px) {
     .menu-toggle { 
         display: flex; 
     }
 
-    /* Keep it hidden by default on mobile */
     .nav { 
         display: none; 
-        flex-direction: column; /* Stack links vertically */
+        flex-direction: column; 
         position: absolute;
         top: 70px;
         right: 0;
@@ -357,7 +355,6 @@ body::before {
         z-index: 1000;
     }
 
-    /* SHOW the menu when the 'active' class is added by JS */
     .nav.active { 
         display: flex; 
     }
@@ -487,7 +484,6 @@ body::before {
     justify-items: center;
 }
 
-/* Make all boxes same width */
 .weapon-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -495,14 +491,12 @@ body::before {
     justify-items: center;
 }
 
-/* Each box takes 2 columns → 5 boxes per row */
 .weapon-box {
     grid-column: span 2;
     width: 100%;
     max-width: 150px;
 }
 
-/* Center second row */
 .weapon-box:nth-child(6) {
     grid-column: 2 / span 2;
 }
@@ -555,7 +549,6 @@ body::before {
     max-height: 100%;
     object-fit: contain;
 
-    /* I use this for center Glow */
     filter: drop-shadow(0 0 10px red)
             drop-shadow(0 0 15px cyan);
 
