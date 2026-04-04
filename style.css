@@ -336,33 +336,30 @@ body::before {
     color: var(--dark-bg);
 }
 
+/* For Making it Responsive */
 @media (max-width: 768px) {
-    .menu-toggle {
-        display: flex;
-    }
-
-    .nav { 
-        display: none; 
-        flex-direction: column; 
-        position: absolute;
-        top: 70px;         
-        left: 0;           
-        right: 0;          
-        width: 100%;       
-        background: rgba(10, 10, 10, 0.98);
-        padding: 2rem;
-        text-align: left;  
-        border-bottom: 1px solid var(--primary); 
-        z-index: 1000;
-    }
-
-    .nav.active { 
+    .menu-toggle { 
         display: flex; 
     }
 
-    .nav-link {
-        margin: 1rem 0;    
-        width: fit-content;
+    /* Keep it hidden by default on mobile */
+    .nav { 
+        display: none; 
+        flex-direction: column; /* Stack links vertically */
+        position: absolute;
+        top: 70px;
+        right: 0;
+        width: 28%;
+        background: rgba(10, 10, 10, 0.95);
+        padding: 2rem;
+        text-align: left;
+        border-bottom: 1px solid var(--primary);
+        z-index: 1000;
+    }
+
+    /* SHOW the menu when the 'active' class is added by JS */
+    .nav.active { 
+        display: flex; 
     }
 }
 
@@ -490,6 +487,7 @@ body::before {
     justify-items: center;
 }
 
+/* Make all boxes same width */
 .weapon-grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -497,12 +495,14 @@ body::before {
     justify-items: center;
 }
 
+/* Each box takes 2 columns → 5 boxes per row */
 .weapon-box {
     grid-column: span 2;
     width: 100%;
     max-width: 150px;
 }
 
+/* Center second row */
 .weapon-box:nth-child(6) {
     grid-column: 2 / span 2;
 }
@@ -555,6 +555,7 @@ body::before {
     max-height: 100%;
     object-fit: contain;
 
+    /* I use this for center Glow */
     filter: drop-shadow(0 0 10px red)
             drop-shadow(0 0 15px cyan);
 
