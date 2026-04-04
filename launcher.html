@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launchers</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Rajdhani', sans-serif;
+            background: url("https://images.openai.com/static-rsc-4/lSwBsIYjeT5BrEbA1rcg60ZAqPFnbwBUbf9B2N95hWwDwriOB87nq6zMPTVd5ghCCInEG2wkBL7HJzPDBy7RYZa2ClHPZjc1iuX9Rgux2YkwNzWPFtUGcEe9EJdEUZi2OSeQ1OqflsKTNnvNVrt1Hb0a2LQmmRzfz--ykGtl_66Ou-SfV08Md0mBxxurlXX-?purpose=fullsize") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .weapon-page {
+            min-height: 100vh;
+            padding: 120px 20px 50px;
+            position: relative;
+        }
+
+        .weapon-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.95));
+            z-index: 0;
+        }
+
+        .weapon-page>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .weapon-title {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff4444, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+        }
+
+        .weapon-grid-page {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* ── FLIP CARD ── */
+        .weapon-card {
+            perspective: 1000px;
+            background: transparent !important;
+            border: none !important;
+            min-height: 420px;
+            box-shadow: none !important;
+        }
+
+        .weapon-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            min-height: 420px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .weapon-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-sizing: border-box;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ── FRONT SIDE ── */
+        .card-header h3 {
+            margin: 0;
+            color: #fff;
+        }
+
+        .category-label {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .weapon-image-container {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .weapon-image-container img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px #ff4444);
+        }
+
+        /* ── FRONT STATS (previously on back) ── */
+        .front-stats {
+            margin: 10px 0 6px;
+            width: 100%;
+        }
+
+        .front-stats p {
+            color: #ccc;
+            margin: 4px 0;
+            font-size: 0.9rem;
+        }
+
+        .front-stats strong {
+            color: #fff;
+        }
+
+        .rank-section {
+            margin-top: 6px;
+            width: 100%;
+        }
+
+        .rank-section p {
+            color: #ccc;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .weapon-rank {
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        /* ── BACK SIDE — CAMO BUTTONS ── */
+        .card-back h3 {
+            color: #fff;
+            margin: 0 0 8px 0;
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .camo-grid-back {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .camo-btn {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .camo-btn:hover {
+            background: #333;
+            border-color: #00d4ff;
+            color: #fff;
+        }
+
+        .gold {
+            background: #FFD700;
+            color: black;
+            border-color: #FFD700;
+        }
+
+        .platinum {
+            background: #E5E4E2;
+            color: black;
+            border-color: #E5E4E2;
+        }
+
+        .damascus {
+            background: #aeaeae;
+            color: black;
+            border-color: #aeaeae;
+        }
+
+        .diamond {
+            background: #B9F2FF;
+            color: black;
+            border-color: #B9F2FF;
+        }
+
+        .tick {
+            color: transparent;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 4px;
+            text-shadow: 0 0 0 #06c306;
+        }
+
+        /* ── FLIP BUTTON ── */
+        .flip-div {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .flip-btn {
+            margin-top: 10px;
+            width: 60%;
+            padding: 8px;
+            border: 1px solid #ff4444;
+            background: transparent;
+            color: #ff4444;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .flip-btn:hover {
+            background: #ff4444;
+            color: black;
+        }
+
+        /* ── BACK BUTTON ── */
+        .flip-back-div {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        /* ── BACK BTN ── */
+        .back-btn {
+            display: block;
+            margin: 40px auto 0;
+            text-align: center;
+            width: fit-content;
+            padding: 10px 20px;
+            border: 1px solid #00d4ff;
+            border-radius: 20px;
+            color: #00d4ff;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #00d4ff;
+            color: black;
+        }
+
+        /* FRONT STATS */
+        .front-stats {
+            margin: 8px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 12px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.55rem;
+            color: #aaa;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .stat-bar-track {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ff4444, #ff8888);
+            box-shadow: 0 0 6px rgba(255, 68, 68, 0.6);
+        }
+
+        /* CAMO PROGRESS PANEL */
+        .camo-progress-panel {
+            background: transparent;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 30px auto 0;
+        }
+
+        .progress-title {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            background: linear-gradient(45deg, #ff4444, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            margin-top: 20px;
+        }
+
+        .progress-item {
+            margin-bottom: 14px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gold-fill {
+            background: linear-gradient(90deg, #FFD700, #FFF176, #FFD700);
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: shimmer-gold 2s infinite linear;
+        }
+
+        .platinum-fill {
+            background: linear-gradient(90deg, #c0c0c0, #ffffff, #c0c0c0);
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(200, 200, 200, 0.3);
+            animation: shimmer-platinum 2s infinite linear;
+        }
+
+        .diamond-fill {
+            background: linear-gradient(90deg, #00d4ff, #B9F2FF, #00d4ff);
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6), 0 0 20px rgba(0, 212, 255, 0.3);
+            animation: shimmer-diamond 2s infinite linear;
+        }
+
+        .damascus-fill {
+            background: linear-gradient(90deg, #7b2cbf, #ced4da, #7b2cbf);
+            background-size: 200% 100%;
+            box-shadow: 0 0 10px rgba(123, 44, 191, 0.6), 0 0 20px rgba(206, 212, 218, 0.3);
+            animation: shimmer-damascus 2s infinite linear;
+        }
+
+        @keyframes shimmer-gold {
+            0% {
+                background-position: 200% center;
+            }
+
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+        @keyframes shimmer-platinum {
+            0% {
+                background-position: 200% center;
+            }
+
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+        @keyframes shimmer-diamond {
+            0% {
+                background-position: 200% center;
+            }
+
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+        @keyframes shimmer-damascus {
+            0% {
+                background-position: 200% center;
+            }
+
+            100% {
+                background-position: -200% center;
+            }
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 60px;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer h2 {
+            font-family: 'Orbitron', monospace;
+            color: #ff4444;
+        }
+
+        .footer button {
+            margin: 10px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid #00d4ff;
+            background: transparent;
+            color: #00d4ff;
+            cursor: pointer;
+        }
+
+        .footer button:hover {
+            background: #00d4ff;
+            color: black;
+        }
+
+        .about-game-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            padding: 0.8rem 1.2rem;
+            border-radius: 30px;
+            width: 260px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s ease;
+            display: block;
+            margin: 0.5rem auto;
+        }
+
+        .about-game-btn:hover {
+            background: var(--secondary);
+            color: #000;
+            box-shadow: 0 0 15px var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-section h4 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            margin-top: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 1rem;
+        }
+
+        .footer-bottom p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .footer .logo {
+            font-size: 1.8rem;
+            color: #ff4444;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="weapon-page">
+        <h1 class="weapon-title">Launchers</h1>
+
+        <div class="weapon-grid-page">
+
+            <!-- CARD -->
+            <div class="weapon-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3>FHJ-18</h3><span class="category-label">LAUNCHER</span>
+                        </div>
+                        <div class="weapon-image-container"><img src="Guns/Launchers/1.jpg"></div>
+                        <div class="front-stats">
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Damage</span>
+                                    <span class="stat-value">150</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:150%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Fire Rate</span>
+                                    <span class="stat-value">32</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:32%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Accuracy</span>
+                                    <span class="stat-value">90</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:90%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Mobility</span>
+                                    <span class="stat-value">40</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:40%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Range</span>
+                                    <span class="stat-value">90</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:90%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Control</span>
+                                    <span class="stat-value">20</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rank-section">
+                            <p>Weapon Rank: <span class="weapon-rank">Not Applicable (NA)</span></p>
+                        </div>
+                        <div class="flip-div"><button class="flip-btn" onclick="flipCard(this)">View Details</button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Camo Progress</h3>
+                        <div class="camo-grid-back">
+                            <button class="camo-btn gold">Gold <span class="tick">✔️</span></button>
+                            <button class="camo-btn platinum">Platinum <span class="tick">✔️</span></button>
+                            <button class="camo-btn damascus">Damascus ❌</button>
+                            <button class="camo-btn diamond">Diamond <span class="tick">✔️</span></button>
+                        </div>
+                        <div class="flip-back-div"><button class="flip-btn" onclick="flipCard(this)">Back</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weapon-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3>SMRS</h3><span class="category-label">LAUNCHER</span>
+                        </div>
+                        <div class="weapon-image-container"><img src="Guns/Launchers/2.jpg"></div>
+                        <div class="front-stats">
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Damage</span>
+                                    <span class="stat-value">290</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:290%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Fire Rate</span>
+                                    <span class="stat-value">35</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:35%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Accuracy</span>
+                                    <span class="stat-value">70</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:70%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Mobility</span>
+                                    <span class="stat-value">40</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:40%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Range</span>
+                                    <span class="stat-value">80</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:80%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Control</span>
+                                    <span class="stat-value">20</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rank-section">
+                            <p>Weapon Rank: <span class="weapon-rank">Not Applicable (NA)</span></p>
+                        </div>
+                        <div class="flip-div"><button class="flip-btn" onclick="flipCard(this)">View Details</button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Camo Progress</h3>
+                        <div class="camo-grid-back">
+                            <button class="camo-btn gold">Gold <span class="tick">✔️</span></button>
+                            <button class="camo-btn platinum">Platinum <span class="tick">✔️</span></button>
+                            <button class="camo-btn damascus">Damascus ❌</button>
+                            <button class="camo-btn diamond">Diamond <span class="tick">✔️</span></button>
+                        </div>
+                        <div class="flip-back-div"><button class="flip-btn" onclick="flipCard(this)">Back</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weapon-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3>Thumper</h3><span class="category-label">LAUNCHER</span>
+                        </div>
+                        <div class="weapon-image-container"><img src="Guns/Launchers/3.jpg"></div>
+                        <div class="front-stats">
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Damage</span>
+                                    <span class="stat-value">150</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:150%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Fire Rate</span>
+                                    <span class="stat-value">35</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:35%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Accuracy</span>
+                                    <span class="stat-value">50</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:50%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Mobility</span>
+                                    <span class="stat-value">55</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:55%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Range</span>
+                                    <span class="stat-value">50</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:50%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Control</span>
+                                    <span class="stat-value">20</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rank-section">
+                            <p>Weapon Rank: <span class="weapon-rank">Not Applicable (NA)</span></p>
+                        </div>
+                        <div class="flip-div"><button class="flip-btn" onclick="flipCard(this)">View Details</button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Camo Progress</h3>
+                        <div class="camo-grid-back">
+                            <button class="camo-btn gold">Gold <span class="tick">✔️</span></button>
+                            <button class="camo-btn platinum">Platinum <span class="tick">✔️</span></button>
+                            <button class="camo-btn damascus">Damascus ❌</button>
+                            <button class="camo-btn diamond">Diamond ❌</button>
+                        </div>
+                        <div class="flip-back-div"><button class="flip-btn" onclick="flipCard(this)">Back</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weapon-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="card-header">
+                            <h3>D13 Sector</h3><span class="category-label">LAUNCHER</span>
+                        </div>
+                        <div class="weapon-image-container"><img src="Guns/Launchers/4.jpg"></div>
+                        <div class="front-stats">
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Damage</span>
+                                    <span class="stat-value">100</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:100%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Fire Rate</span>
+                                    <span class="stat-value">60</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:60%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Accuracy</span>
+                                    <span class="stat-value">60</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:60%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Mobility</span>
+                                    <span class="stat-value">60</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:60%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Range</span>
+                                    <span class="stat-value">60</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:60%"></div>
+                                </div>
+                            </div>
+
+                            <div class="stat-item">
+                                <div class="stat-header">
+                                    <span class="stat-name">Control</span>
+                                    <span class="stat-value">30</span>
+                                </div>
+                                <div class="stat-bar-track">
+                                    <div class="stat-bar-fill" style="width:30%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rank-section">
+                            <p>Weapon Rank: <span class="weapon-rank">Not Applicable (NA)</span></p>
+                        </div>
+                        <div class="flip-div"><button class="flip-btn" onclick="flipCard(this)">View Details</button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>Camo Progress</h3>
+                        <div class="camo-grid-back">
+                            <button class="camo-btn gold">Gold <span class="tick">✔️</span></button>
+                            <button class="camo-btn platinum">Platinum <span class="tick">✔️</span></button>
+                            <button class="camo-btn damascus">Damascus ❌</button>
+                            <button class="camo-btn diamond">Diamond ❌</button>
+                        </div>
+                        <div class="flip-back-div"><button class="flip-btn" onclick="flipCard(this)">Back</button></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="camo-progress-panel">
+            <h3 class="progress-title">Camo Progress</h3>
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Gold</span>
+                    <span class="progress-value">Total Count: 04/04 | Total Percentage: 100%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill gold-fill" style="width:100%"></div>
+                </div>
+            </div>
+
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Platinum</span>
+                    <span class="progress-value">Total Count: 04/04 | Total Percentage: 100%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill platinum-fill" style="width:100%"></div>
+                </div>
+            </div>
+
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Diamond</span>
+                    <span class="progress-value">Total Count: 02/04 | Total Percentage: 50%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill diamond-fill" style="width:50%"></div>
+                </div>
+            </div>
+
+            <div class="progress-item">
+                <div class="progress-label">
+                    <span>Damascus</span>
+                    <span class="progress-value">Total Count: 0/04 | Total Percentage: 0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill damascus-fill" style="width:0%"></div>
+                </div>
+            </div>
+
+        </div>
+        <a href="index.html" class="back-btn">⬅ Back</a>
+
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-crosshairs"></i>
+                        <span>CODM ProStats</span>
+                    </div>
+                </div>
+                <div class="footer-section" id="about-area">
+                    <h4>Quick Links</h4>
+                    <button class="about-game-btn"
+                        onclick="window.open('https://en.wikipedia.org/wiki/Call_of_Duty:_Mobile', '_blank')">
+                        <i class="fas fa-info-circle"></i> About Call of Duty Mobile
+                    </button>
+
+                    <button class="about-game-btn" onclick="window.open('https://linktr.ee/codeswithjatin', '_blank')">
+                        <i class="fas fa-info-circle"></i> About Developer
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <center>
+                    <p>Created with ❤️ By Jatin Kr. Koli</p>
+                    <p>&copy; 2026 CODM ProStats. Track your journey like a pro.</p>
+                </center>
+            </div>
+        </div>
+    </footer>
+    <script>
+        const audio = new Audio('sounds/Card-Flip-Sound.wav');
+
+        function flipCard(btn) {
+            const card = btn.closest(".weapon-card");
+            card.classList.toggle("flipped");
+        }
+
+        function flipCard(btn) {
+            const audio = new Audio('sounds/Card-Flip-Sound.wav');
+            audio.volume = 0.4;
+            audio.play();
+            const card = btn.closest(".weapon-card");
+            card.classList.toggle("flipped");
+        }
+    </script>
+</body>
+
+</html>

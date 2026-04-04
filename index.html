@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CODM ProStats - Call of Duty Mobile Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-crosshairs"></i>
+                <span>CODM ProStats</span>
+            </div>
+            <nav class="nav" id="mainNav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#player-profile" class="nav-link">Player Profile</a>
+                <a href="#weapon-category" class="nav-link">Weapon Categories</a>
+                <a href="#about-area" class="nav-link">About</a>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <video autoplay muted loop playsinline id="hero-video" poster="your-screenshot.jpg">
+            <source src="CODM-BG-VID (1).mp4" type="video/mp4">
+        </video>
+
+        <div class="video-overlay"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to CODM ProStats</h1>
+            <p class="hero-subtitle">- Track your progress, showcase your skills, and compete with the best CODM players
+                -</p>
+        </div>
+    </section>
+
+    <section id="player-profile" class="section profile-form-section">
+        <div class="container">
+            <div id="form-container">
+                <div class="section-header">
+                    <h2>Player Profile</h2>
+                    <p>- Enter your stats and showcase to your teammates -</p>
+                </div>
+            </div>
+
+            <div class="player-details">
+                <h3>Player Details</h3>
+
+                <div class="details-grid">
+                    <div><strong>In-Game Name:</strong> <span id="detailName">Dârk_Wîtchêr</span></div>
+                    <div><strong>UID:</strong> <span id="detailUID">6937994791016398849</span></div>
+                    <div><strong>Clan:</strong> <span id="detailClan">SkylaCodm</span></div>
+                    <div><strong>Likes:</strong> <span id="detailLikes">9294</span></div>
+                </div>
+
+                <div class="mode-stats">
+                    <div class="mode-box">
+                        <h4>Multiplayer (MP)</h4>
+                        <p>Streak: <span id="mpStreak">10</span></p>
+                        <p>Rank: <span id="mpRank">Legendary</span></p>
+                    </div>
+
+                    <div class="mode-box">
+                        <h4>Battle Royale (BR)</h4>
+                        <p>Streak: <span id="brStreak">17</span></p>
+                        <p>Rank: <span id="brRank">GrandMaster V</span></p>
+                    </div>
+
+                    <div class="mode-box">
+                        <h4>DMZ Mode</h4>
+                        <p>Streak: <span id="dmzStreak">0</span></p>
+                        <p>Rank: <span id="dmzRank">Master V</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="rank-stats-section">
+                <h3>Rank Stats</h3>
+
+                <div class="rank-stats-grid">
+
+                    <!-- MP -->
+                    <div class="rank-box">
+                        <h4>Multiplayer (MP)</h4>
+                        <p>MVP: <span id="mpMVP">2059</span></p>
+                        <p>Games: <span id="mpGames">9285</span></p>
+                        <p>Top 3: <span id="mpTop3">4909</span></p>
+                        <p>Kills: <span id="mpKills">142113</span></p>
+                        <p>K/D Ratio: <span id="mpKD">2.34</span></p>
+                        <p>Avg. Accuracy: <span id="mpAccuracy">17.93%</span></p>
+                    </div>
+
+                    <!-- BR -->
+                    <div class="rank-box">
+                        <h4>Battle Royale (BR)</h4>
+                        <p>MVP: <span id="brMVP">1060</span></p>
+                        <p>Wins: <span id="brWins">1098</span></p>
+                        <p>Matches: <span id="brMatches">4298</span></p>
+                        <p>Kills: <span id="brKills">19331</span></p>
+                        <p>Avg. Damage: <span id="brDamage">1111.25</span></p>
+                        <p>Avg. Accuracy: <span id="brAccuracy">25.90%</span></p>
+                    </div>
+
+                    <!-- DMZ -->
+                    <div class="rank-box">
+                        <h4>DMZ Mode</h4>
+                        <p>Matches Played: <span id="dmzMatches">110</span></p>
+                        <p>Exfil Rate: <span id="dmzExfil">46.36%</span></p>
+                        <p>Profit/Loss Ratio: <span id="dmzPL">1.53</span></p>
+                        <p>Total Assets: <span id="dmzAssets">3690448</span></p>
+                        <p>Kills: <span id="dmzKills">134</span></p>
+                        <p>Contracts Complete: <span id="dmzContracts">52</span></p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="weapon-section" id="weapon-category">
+                <h3 id="Weapon-Categories">Weapon Categories</h3>
+                <center>
+                    <p class="hero-subtitle2">- Explore different weapon categories and their camo progress -</p>
+                </center>
+
+                <div class="weapon-grid">
+
+                    <a href="ar.html" class="weapon-box">
+                        <img src="Guns/Section/AR.png" alt="AR">
+                        <span>Assault Rifle (AR)</span>
+                    </a>
+
+                    <a href="sniper.html" class="weapon-box">
+                        <img src="Guns/Section/SR.png" alt="SR">
+                        <span>Sniper Rifle (SR)</span>
+                    </a>
+
+                    <a href="lmg.html" class="weapon-box">
+                        <img src="Guns/Section/LMG.png" alt="LMG">
+                        <span>Long-Mid Range Gun (LMG)</span>
+                    </a>
+
+                    <a href="smg.html" class="weapon-box">
+                        <img src="Guns/Section/SMG.png" alt="SMG">
+                        <span>Short-Mid Range Gun (SMG)</span>
+                    </a>
+
+                    <a href="shotgun.html" class="weapon-box">
+                        <img src="Guns/Section/Shotgun.png" alt="Shotgun">
+                        <span>Shotguns</span>
+                    </a>
+
+                    <a href="marksman.html" class="weapon-box">
+                        <img src="Guns/Section/MR.png" alt="MR">
+                        <span>Marksman Rifle (MR)</span>
+                    </a>
+
+                    <a href="pistols.html" class="weapon-box">
+                        <img src="Guns/Section/Pistols.png" alt="Pistol">
+                        <span>Pistols</span>
+                    </a>
+
+                    <a href="launcher.html" class="weapon-box">
+                        <img src="Guns/Section/Launchers.png" alt="Launcher">
+                        <span>Launchers</span>
+                    </a>
+
+                    <a href="melee.html" class="weapon-box">
+                        <img src="Guns/Section/Melee.png" alt="Melee">
+                        <span>Melees</span>
+                    </a>
+
+                </div>
+            </div>
+            <div class="camo-progress-section">
+                <div class="section-header">
+                    <h2>Overall Camo Progress</h2>
+                    <p class="hero-subtitle2">- Showcase of Overall Camo Progress across all weapon categories -</p>
+                </div>
+
+                <div class="camo-progress-panel">
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span class="progress-camo-name">Gold</span>
+                            <span class="progress-value">79 / 141 &nbsp;|&nbsp; 56.03%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill gold-fill" style="width:56.03%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span class="progress-camo-name">Platinum</span>
+                            <span class="progress-value">22 / 141 &nbsp;|&nbsp; 15.60%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill platinum-fill" style="width:15.60%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span class="progress-camo-name">Diamond</span>
+                            <span class="progress-value">30 / 141 &nbsp;|&nbsp; 21.28%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill diamond-fill" style="width:21.28%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-label">
+                            <span class="progress-camo-name">Damascus</span>
+                            <span class="progress-value">0 / 141 &nbsp;|&nbsp; 0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill damascus-fill" style="width:0%"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-crosshairs"></i>
+                        <span>CODM ProStats</span>
+                    </div>
+                </div>
+                <div class="footer-section" id="about-area">
+                    <h4>Quick Links</h4>
+                    <button class="about-game-btn"
+                        onclick="window.open('https://en.wikipedia.org/wiki/Call_of_Duty:_Mobile', '_blank')">
+                        <i class="fas fa-info-circle"></i> About Call of Duty Mobile
+                    </button>
+
+                    <button class="about-game-btn" onclick="window.open('https://linktr.ee/codeswithjatin', '_blank')">
+                        <i class="fas fa-info-circle"></i> About Developer
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <center>
+                    <p>Created with ❤️ By Jatin Kr. Koli</p>
+                    <p>&copy; 2026 CODM ProStats. Track your journey like a pro.</p>
+                </center>
+            </div>
+        </div>
+    </footer>
+    <audio id="bgMusic" autoplay loop>
+        <source src="Sounds/Soundtrack.webm" type="audio/webm">
+    </audio>
+    <script src="script.js"></script>
+    <button id="musicToggle" title="Toggle Music">
+        <i class="fas fa-volume-up" id="musicIcon">
+        </i></button>
+</body>
+
+</html>
