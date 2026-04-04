@@ -347,10 +347,9 @@ body::before {
         position: absolute;
         top: 70px;
         right: 0;
-        width: 28%;
+        width: 30%;
         background: rgba(10, 10, 10, 0.95);
         padding: 2rem;
-        text-align: left;
         border-bottom: 1px solid var(--primary);
         z-index: 1000;
     }
