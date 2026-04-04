@@ -1,10 +1,7 @@
-// Run after page loads
 document.addEventListener('DOMContentLoaded', function () {
     setupMobileMenu();
 });
 
-
-// MOBILE MENU
 function setupMobileMenu() {
     const menuToggle = document.getElementById('mobile-menu');
     const nav = document.getElementById('mainNav');
@@ -16,8 +13,6 @@ function setupMobileMenu() {
     }
 }
 
-
-// NAV ACTIVE SCROLL HIGHLIGHT
 const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll(".nav-link");
 
@@ -39,8 +34,6 @@ window.addEventListener("scroll", () => {
     });
 });
 
-
-// CLOSE MOBILE MENU ON CLICK
 navLinks.forEach(link => {
     link.addEventListener("click", () => {
         const nav = document.getElementById("mainNav");
@@ -48,7 +41,6 @@ navLinks.forEach(link => {
     });
 });
 
-// BACKGROUND MUSIC
 document.addEventListener('DOMContentLoaded', function () {
     const bgMusic = document.getElementById('bgMusic');
     const toggleBtn = document.getElementById('musicToggle');
@@ -59,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
     bgMusic.volume = 0.3;
     let isMuted = false;
 
-    // Try autoplay first
     bgMusic.play().catch(() => {
         const startMusic = () => {
             bgMusic.play();
@@ -72,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('touchstart', startMusic);
     });
 
-    // Toggle mute/unmute
     toggleBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         isMuted = !isMuted;
@@ -88,4 +78,15 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleBtn.title = 'Mute Music';
         }
     });
+});
+
+self.addEventListener("fetch", event => {
+  if (event.request.url.includes('_vercel/insights')) {
+    return;
+  }
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
 });
