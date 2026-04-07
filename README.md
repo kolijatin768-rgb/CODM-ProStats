@@ -42,4 +42,4 @@ CODM ProStats/
 
 ## ✍️ Author
 
-Created with ❤️ by **Jatin Koli**.                                                  
+Created with ❤️ by **Jatin Kr. Koli**.                                                  
