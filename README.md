@@ -43,3 +43,11 @@ CODM ProStats/
 ## ✍️ Author
 
 Created with ❤️ by **Jatin Kr. Koli**.                                                  
+
+
+## 🎤 Pitch Deck
+
+A developer-focused presentation deck is available here:
+
+- [`PITCH_DECK.md`](./PITCH_DECK.md)
+
