@@ -231,7 +231,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 *CODM ProStats — Track your journey like a pro.*
 
-[![GitHub](https://img.shields.io/badge/GitHub-@codeswithjatin-181717?style=flat&logo=github)](https://github.com/codeswithjatin)
+[![GitHub](https://img.shields.io/badge/GitHub-@codeswithjatin-181717?style=flat&logo=github)](https://github.com/kolijatin768-rgb)
 [![Linktree](https://img.shields.io/badge/Linktree-codeswithjatin-39E09B?style=flat&logo=linktree&logoColor=white)](https://linktr.ee/codeswithjatin)
 
 </div>
