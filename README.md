@@ -86,7 +86,6 @@ Shimmer-animated progress bars with glow effects for all 4 camo tiers across all
 | Interactivity | Vanilla JavaScript (ES6+) |
 | Fonts | Google Fonts — `Orbitron` (display) + `Rajdhani` (body) |
 | Icons | Font Awesome 6 |
-| Email | EmailJS (contact integration) |
 | Offline | Service Worker (`sw.js`) — PWA cache-first strategy |
 
 **Zero frameworks. Zero npm dependencies. No build step required.**
